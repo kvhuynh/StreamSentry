@@ -1,16 +1,17 @@
 // require("dotenv").config();
 require("dotenv").config();
+const cors = require("cors");
 const express = require("express");
-
+const { twitchRouter } = require("./routes/twitch.routes");
 
 const app = express();
 const port = 8000;
+app.use("/api/v1/twitch/", twitchRouter);
 app.listen(port, () => {
 	console.log(`Listening on port ${port} for requests to respond to`);
 });
 
 
-app.use("/api/v1/twitch");
 
 // import axios from "axios";
 

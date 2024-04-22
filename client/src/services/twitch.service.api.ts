@@ -1,11 +1,15 @@
 import axios from "axios";
 
 const http = axios.create({
-    baseURL: "http://localhost/api/v1/twitch"
+	baseURL: "http://localhost:8000/api/v1/twitch",
 });
 
 export const getPopularChannels = async () => {
-    const res = await http.get("/getChannels");
-    return res.data;
-}
-
+	try {
+		console.log("jaslfkjasldfkjasldkfjs");
+		const res = await http.get("/getPopularChannels");
+		return res.data;
+	} catch (error) {
+		console.log(error);
+	}
+};

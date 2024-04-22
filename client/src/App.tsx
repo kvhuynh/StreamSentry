@@ -6,7 +6,7 @@ function App() {
 
 
 	return (
-		<ChakraProvider>
+	<ChakraProvider>
 			<Home></Home>
     </ChakraProvider>
 	);
