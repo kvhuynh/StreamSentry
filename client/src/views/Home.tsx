@@ -1,30 +1,68 @@
 import { useEffect, useState } from "react";
 import { getPopularChannels } from "../services/twitch.service.api";
-import { Button } from "@chakra-ui/react";
-
-
+import {
+	Box,
+	Button,
+	ButtonGroup,
+	Card,
+	CardBody,
+	CardFooter,
+	CardHeader,
+	Center,
+	Flex,
+	Heading,
+	Image,
+	SimpleGrid,
+	Spacer,
+	Stack,
+	Text,
+	Wrap,
+	WrapItem,
+	Link,
+} from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
 
 export const Home: React.FC = () => {
-    const [channels, setChannels] = useState<unknown>([]);
-    useEffect(() => {
-        getPopularChannels()
-        .then((popularChannels: object) => {
-            setChannels(popularChannels);
-        })
-
-    }, [])
-    return(
-        <>
-            {channels.map((channel: unknown) => {
-                return (
-                    <div>
-                        {channel.game_name}
-                    </div>
-                )
-            })}
-
-        </>
-    )
-}
+	const [channels, setChannels] = useState<any>([]);
+	useEffect(() => {
+		getPopularChannels().then((popularChannels: object) => {
+			setChannels(popularChannels);
+		});
+	}, []);
+	return (
+		<Wrap justify={"center"}>
+			{/* <Center> */}
+			{channels.map((channel: unknown, i: number) => {
+				return (
+					<Link as={NavLink} to={channel.user_name}>
+						<Card data-type="Card" maxW="sm" maxH="l" key={i}>
+							<CardBody data-type="CardBody">
+								<Image
+									src={channel.thumbnail_url
+										.replace("{width}", 500)
+										.replace("{height}", 300)}
+									alt={channel.thumbnail_url}
+									borderRadius="lg"
+								></Image>
+								<Stack data-type="Stack" mt="6" spacing="3">
+									<Heading data-type="Heading" size="md">
+										{channel.user_name}
+									</Heading>
+									<Text data-type="Text">{channel.title}</Text>
+								</Stack>
+							</CardBody>
+							<CardFooter data-type="CardFooter">
+								<Text data-type="Text" color="red.600" fontSize="s">
+									{channel.viewer_count} viewers
+								</Text>
+							</CardFooter>
+						</Card>
+					</Link>
+				);
+			})}
+			{/* </Center> */}
+		</Wrap>
+	);
+};
 
 export default Home;

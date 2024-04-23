@@ -7,7 +7,7 @@ const { twitchRouter } = require("./routes/twitch.routes");
 const app = express();
 const port = 8000;
 
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: ["http://localhost:5173"] }));
 app.use("/api/v1/twitch/", twitchRouter);
 
 app.listen(port, () => {
