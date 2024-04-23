@@ -2,21 +2,28 @@ import { useEffect, useState } from "react";
 import { getPopularChannels } from "../services/twitch.service.api";
 import { Button } from "@chakra-ui/react";
 
+
+
 export const Home: React.FC = () => {
-    // const [channels] = useState(null);
-    // useEffect(() => {
-
-    // })
-
-    const handleGetPopularChannels = () => {
+    const [channels, setChannels] = useState<unknown>([]);
+    useEffect(() => {
         getPopularChannels()
-    }
+        .then((popularChannels: object) => {
+            setChannels(popularChannels);
+        })
 
+    }, [])
     return(
-        <Button onClick={handleGetPopularChannels}>
+        <>
+            {channels.map((channel: unknown) => {
+                return (
+                    <div>
+                        {channel.game_name}
+                    </div>
+                )
+            })}
 
-            <div>yo</div>
-        </Button>
+        </>
     )
 }
 

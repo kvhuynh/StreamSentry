@@ -14,31 +14,41 @@
 
 // 	}
 // });
-import axios from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
-export const generateAuthorizationToken = async () => {
-    // const res = await axios.get("https://id.twitch.tv/oauth2/token", {headers: { "client_id": process.env.TWITCH_CLIENT_ID, "client_secret": process.env.TWITCH_CLIENT_SECRET} });
+let http: AxiosInstance = axios.create({
+    baseURL: "https://api.twitch.tv/",
+    headers: {"Authorization": process.env.TWITCH_AUTHORIZATION_TOKEN, "Client-Id": process.env.TWITCH_CLIENT_ID}
+});
 
-    // process.env["TWITCH_AUTHORIZATION_TOKEN"] = 
-    // console.log(res);
-    // console.log(process.env.TWITCH_CLIENT_ID)
+const generateAuthorizationToken = async (http: AxiosInstance) => {
+    const res: AxiosResponse = await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&grant_type=client_credentials`);
+    http.defaults.headers.Authorization = `Bearer ${res.data.access_token}`;
+    console.log(http.defaults.headers.Authorization);
+    
+}
 
+const checkAuthorizationToken = async (http: AxiosInstance) => {
+    if (http.defaults.headers.Authorization === undefined) {
+        await generateAuthorizationToken(http);
+    }
 }
 
 export const getPopularChannels = async () => {
-
-    const http = axios.create({
-        baseURL: "https://api.twitch.tv/",
-        headers: {"Authorization": process.env.TWITCH_AUTHORIZATION_TOKEN, "Client-Id": process.env.TWITCH_CLIENT_ID}
-    });
     try {
-        console.log("here")
+        await checkAuthorizationToken(http);
+        
         const res = await http.get(`helix/streams?"first=100`);
-        console.log(res.data.data);
-        // console.log("here")
+        parsePopularChannels(res.data)
+        return res.data
 
-    } catch (error) {
-        generateAuthorizationToken();
-        // console.log(error);
+    } catch (error: any) {
+        console.log(error);
+        
     }
+}
+
+const parsePopularChannels = (data: object) => {
+    console.log(data);
+    
 }

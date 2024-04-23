@@ -6,9 +6,10 @@ const http = axios.create({
 
 export const getPopularChannels = async () => {
 	try {
-		console.log("jaslfkjasldfkjasldkfjs");
 		const res = await http.get("/getPopularChannels");
-		return res.data;
+		console.log(res.data.data);
+		
+		return res.data.data;
 	} catch (error) {
 		console.log(error);
 	}

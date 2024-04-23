@@ -1,12 +1,12 @@
-const {
-    getPopularChannels
-} = require("../services/twitch.service")
+const { getPopularChannels } = require("../services/twitch.service");
 
 export const handleGetPopularChannels = async (req: any, res: any) => {
-    try {
-        const popularChannels = await getPopularChannels();
-        // console.log(res.json(popularChannels));
-    } catch (error: any) {
+	try {
+		const popularChannels = await getPopularChannels();
+
+		return res.json(popularChannels);
+	} catch (error: any) {
+        console.log(error);
         
     }
-}
+};
