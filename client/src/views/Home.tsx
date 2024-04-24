@@ -23,7 +23,7 @@ import {
 import { NavLink } from "react-router-dom";
 
 export const Home: React.FC = () => {
-	const [channels, setChannels] = useState<any>([]);
+	const [channels, setChannels] = useState<Array<unknown>>([]);
 	useEffect(() => {
 		getPopularChannels().then((popularChannels: object) => {
 			setChannels(popularChannels);
@@ -34,8 +34,12 @@ export const Home: React.FC = () => {
 			{/* <Center> */}
 			{channels.map((channel: unknown, i: number) => {
 				return (
-					<Link as={NavLink} to={channel.user_name}>
-						<Card data-type="Card" maxW="sm" maxH="l" key={i}>
+					<Link
+						as={NavLink}
+						to={channel.user_name}
+                        state={{ channel }}
+					>
+						<Card data-type="Card" maxW={400} key={i}>
 							<CardBody data-type="CardBody">
 								<Image
 									src={channel.thumbnail_url
@@ -48,11 +52,18 @@ export const Home: React.FC = () => {
 									<Heading data-type="Heading" size="md">
 										{channel.user_name}
 									</Heading>
-									<Text data-type="Text">{channel.title}</Text>
+									<Text data-type="Text" noOfLines={1}>
+										{channel.title}{" "}
+									</Text>
 								</Stack>
 							</CardBody>
 							<CardFooter data-type="CardFooter">
-								<Text data-type="Text" color="red.600" fontSize="s">
+								<Text
+									data-type="Text"
+									color="red.600"
+									fontSize="s"
+									sx={{ wordWrap: "wrap" }}
+								>
 									{channel.viewer_count} viewers
 								</Text>
 							</CardFooter>
