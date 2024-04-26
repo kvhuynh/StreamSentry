@@ -14,3 +14,18 @@ export const getPopularChannels = async () => {
 		console.log(error);
 	}
 };
+
+export const readChat = async (channelName: string) => {
+	try {
+		const res = await http.get("/readChat", {
+			params: {
+				channelName: channelName
+			}
+		});
+		console.log(res.data);
+		
+		return res.data;
+	} catch (error) {
+		console.log(error);
+	}
+}

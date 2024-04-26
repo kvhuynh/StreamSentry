@@ -1,31 +1,37 @@
-import { Box, Center, Flex, Square, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Box, Flex } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { readChat } from "../services/twitch.service.api";
 
-export const Channel: React.FC = (props: any) => {
+export const Channel: React.FC = () => {
 	// const [channelData, setChannelData] = useState();
-	let { state } = useLocation();
+	const { state } = useLocation();
 	useEffect(() => {
-		console.log(state.channel.user_name);
+		// if (state === undefined) {
+		// 	// grab from twitch api
+		// }
+		readChat(state.channel.user_name);
 	}, []);
 	return (
-		// <Flex color="white">
-		// 	<Center w="100px" bg="green.500">
-		// 		<Text>Box 1</Text>
-		// 	</Center>
-		// 	<Square bg="blue.500" size="150px">
-		// 		<Text>Box 2</Text>
-		// 	</Square>
-		// 	<Box flex="1" bg="tomato">
+		<Flex color="white" h={"100vh"}>
+			<Box w="70%" bg="green.500">
+				{/* graph here */}
 
-		// 	</Box>
-		// </Flex>
-		<Flex>
-			<iframe
-				src={`https://www.twitch.tv/embed/${state.channel.user_name}/chat?parent=localhost`}
-				width="100%"
-				height="100%"
-			></iframe>
+			</Box>
+			<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
+				<iframe
+					src={`https://www.twitch.tv/embed/${state.channel.user_name}/chat?parent=localhost`}
+					width="100%"
+					height="100%"
+				></iframe>
+			</Box>
 		</Flex>
+		// <Flex>
+		// 	<iframe
+		// 		src={`https://www.twitch.tv/embed/${state.channel.user_name}/chat?parent=localhost`}
+		// 		width="100%"
+		// 		height="100%"
+		// 	></iframe>
+		// </Flex>
 	);
 };

@@ -1,20 +1,6 @@
-// const tmi = require('tmi.js');
-
-// const client = new tmi.Client({
-// 	channels: [ 'forsen' ]
-// });
-
-// client.connect();
-
-// client.on('message', (channel, tags, message, self) => {
-// 	// "Alca: Hello, World!"
-// 	// console.log(`${tags['display-name']}: ${message}`);
-// 	if (tags["subscriber"] == true) {
-// 		console.log(`${tags['display-name']}: ${message}`);
-
-// 	}
-// });
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+
+const tmi = require('tmi.js');
 
 let http: AxiosInstance = axios.create({
     baseURL: "https://api.twitch.tv/",
@@ -51,4 +37,24 @@ export const getPopularChannels = async () => {
 const parsePopularChannels = (data: object) => {
     console.log(data);
     
+}
+
+export const readChat = (channelName: string) => {
+    console.log(channelName);
+    
+    const client = new tmi.Client({
+        channels: [ channelName ]
+    });
+
+    client.connect();
+
+    client.on('message', (channel: any, tags: any, message: any, self: any) => {
+        // "Alca: Hello, World!"
+        // console.log(`${tags['display-name']}: ${message}`);
+        if (tags["subscriber"] == true) {
+            console.log(`${tags['display-name']}: ${message}`);
+            return `${tags['display-name']}: ${message}`
+
+        }
+    });
 }
