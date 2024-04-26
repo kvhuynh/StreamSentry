@@ -1,6 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
+const { Server } = require("socket.io")
+
 const tmi = require('tmi.js');
+// const server = http.createServer(app);
+const io = new Server(8001, {});
 
 let http: AxiosInstance = axios.create({
     baseURL: "https://api.twitch.tv/",
@@ -42,8 +46,10 @@ const parsePopularChannels = (data: object) => {
 export const readChat = (channelName: string) => {
     console.log(channelName);
     
+    // io.emit('message', { user: tags['display-name'], message });
+
     const client = new tmi.Client({
-        channels: [ channelName ]
+        channels: [ "mizkif" ]
     });
 
     client.connect();
@@ -53,6 +59,8 @@ export const readChat = (channelName: string) => {
         // console.log(`${tags['display-name']}: ${message}`);
         if (tags["subscriber"] == true) {
             console.log(`${tags['display-name']}: ${message}`);
+            io.emit('message', { user: tags['display-name'], message });
+
             return `${tags['display-name']}: ${message}`
 
         }
