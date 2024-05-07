@@ -14,46 +14,58 @@ export const Channel: React.FC = () => {
 
 	let ignore = false;
 
-	useEffect(() => {
-		const socket = socketIo("http://localhost:8000", {
-			transports: ["websocket"],
-		});
+	const socket = socketIo("http://localhost:8000", {
+		transports: ["websocket"],
+	});
 
-		// Connect to Socket.io server
+	useEffect(() => {
+		socket.connect();
 		socket.on("connect", () => {
 			console.log("Connected to Socket.io server");
+			console.log(socket.id);
 		});
+	}, []);
 
-		// Listen for incoming messages
+	useEffect(() => {
+		// Connect to Socket.io server
+		// socket.connect();
+		// socket.on("connect", () => {
+		// 	console.log("Connected to Socket.io server");
+		// 	console.log(socket.id);
+		// });
+		// console.log("wtf");
+
+		//	// Listen for incoming messages
 		const handleNewMessage = (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
+			// console.log(msg);
 		};
 		socket.on("message", handleNewMessage);
-		// Handle disconnection
-		socket.on("disconnect", () => {
-			console.log("Disconnected from Socket.io server");
-		});
 
-		// Clean up the socket connection when the component unmounts
-		return () => {
-			// socket.off("message", handleNewMessage);
-			socket.disconnect();
-		};
+		// Handle disconnection
+		// socket.on("disconnect", () => {
+		// 	console.log("Disconnected from Socket.io server");
+		// });
+
+		// // Clean up the socket connection when the component unmounts
+		// return () => {
+		// 	// socket.off("message", handleNewMessage);
+		// 	socket.disconnect();
+		// };
 	}, []); // This useEffect runs only once when the component mounts
 
 	useEffect(() => {
 		if (!ignore) {
-
 			readChat(state.channel.user_name);
 		}
 		return () => {
-			ignore=true
-		}
+			ignore = true;
+		};
 	}, []);
+
 	return (
 		<Flex color="white" h={"100vh"}>
 			<Box w="70%" bg="green.500">
-				{/* graph here */}
 				<div>
 					<h1>Twitch Chat</h1>
 					<ul>
