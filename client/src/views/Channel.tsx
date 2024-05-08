@@ -32,27 +32,23 @@ interface Message {
 export const Channel: React.FC = () => {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [user, setUser] = useState<any>([]);
-	const [dataset, setDataSet] = useState<any>([]);
 	const { state } = useLocation();
 
 	let ignore = false;
 
 	const labels = user;
-  const datasets = 
-    labels.map((label) => {
-      return {
-        label: "???",
-        data: label.length,
-      };
-    })
-  
 
 	const data = {
 		labels,
-		datasets
+		datasets: [
+			{
+				labels: "dataset 1",
+				data: labels.map((label) => label.length),
+        backgroundColor: 'rgb(255, 99, 132)',
+        stack: 'Stack 0',
+			},
+		],
 	};
-  console.log(data.datasets[0]);
-  
 
 	useEffect(() => {
 		socket.connect();
@@ -66,13 +62,6 @@ export const Channel: React.FC = () => {
 		const handleNewMessage = (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
 			setUser((prevUser) => [...prevUser, msg.user]);
-			setDataSet((prevData) => [
-				...prevData,
-				{
-					label: "Dataset1",
-					data: 3,
-				},
-			]);
 		};
 		socket.on("message", handleNewMessage);
 	}, []); // This useEffect runs only once when the component mounts
