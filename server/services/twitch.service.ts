@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 
 const tmi = require("tmi.js");
 // const server = http.createServer(app);
-const socketIo = require("socket.io")
+const socketIo = require("socket.io");
 
 let io: any;
 let http: AxiosInstance = axios.create({
@@ -43,34 +43,29 @@ const parsePopularChannels = (data: object) => {
 	console.log(data);
 };
 
-export const initializeSocket = (server: any) => {
-    io = socketIo(server);
-    
-    io.on('connection', (socket: any) => {
-      console.log('Client connected');
-      
-      // Handle disconnect
-      socket.on('disconnect', () => {
-        console.log('Client disconnected');
-      });
-    });
-  };
-
 export const readChat = (channelName: string) => {
 	console.log(channelName);
-
+    const io = require('../config/socket.config').getio();
 	const client = new tmi.Client({
 		channels: [channelName],
 	});
 
 	client.connect();
 
-	// Listen for messages
-	console.log("i am running");
-	
-	client.on('message', (channel: any, tags: any, message: any, self: any) => {		
+	let words: any = [];
+	client.on("message", (channel: any, tags: any, message: any, self: any) => {
 		// Emit message to connected clients
-		
+		// console.log({ user: tags['display-name'], message });
+		for (let word in message.split(" ")) {
+			words.push(message.split(" ")[word]);
+			// console.log();
+		}
+        // words = { user: tags['display-name'], message }
+        
 		io.emit('message', { user: tags['display-name'], message });
+        // io.emit('message', words);
+
 	});
+        // io.emit('message', words);
+
 };

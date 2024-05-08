@@ -2,8 +2,28 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { readChat } from "../services/twitch.service.api";
-import socketIo from "socket.io-client";
-import { socket } from "../socket"
+import { Bar } from "react-chartjs-2";
+import { socket } from "../socket";
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	// Legend,
+} from "chart.js";
+import faker from "faker";
+
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip
+	// Legend
+);
+
 interface Message {
 	user: string;
 	message: string;
@@ -11,13 +31,28 @@ interface Message {
 
 export const Channel: React.FC = () => {
 	const [messages, setMessages] = useState<Message[]>([]);
+	const [user, setUser] = useState<any>([]);
+	const [dataset, setDataSet] = useState<any>([]);
 	const { state } = useLocation();
 
 	let ignore = false;
 
-	// const socket = socketIo("http://localhost:8000", {
-	// 	transports: ["websocket"],
-	// });
+	const labels = user;
+  const datasets = 
+    labels.map((label) => {
+      return {
+        label: "???",
+        data: label.length,
+      };
+    })
+  
+
+	const data = {
+		labels,
+		datasets
+	};
+  console.log(data.datasets[0]);
+  
 
 	useEffect(() => {
 		socket.connect();
@@ -28,31 +63,18 @@ export const Channel: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		// Connect to Socket.io server
-		// socket.connect();
-		// socket.on("connect", () => {
-		// 	console.log("Connected to Socket.io server");
-		// 	console.log(socket.id);
-		// });
-		// console.log("wtf");
-
-		//	// Listen for incoming messages
 		const handleNewMessage = (msg: Message) => {
 			setMessages((prevMessages) => [...prevMessages, msg]);
-			// console.log(msg);
+			setUser((prevUser) => [...prevUser, msg.user]);
+			setDataSet((prevData) => [
+				...prevData,
+				{
+					label: "Dataset1",
+					data: 3,
+				},
+			]);
 		};
 		socket.on("message", handleNewMessage);
-
-		// Handle disconnection
-		// socket.on("disconnect", () => {
-		// 	console.log("Disconnected from Socket.io server");
-		// });
-
-		// // Clean up the socket connection when the component unmounts
-		// return () => {
-		// 	// socket.off("message", handleNewMessage);
-		// 	socket.disconnect();
-		// };
 	}, []); // This useEffect runs only once when the component mounts
 
 	useEffect(() => {
@@ -69,13 +91,14 @@ export const Channel: React.FC = () => {
 			<Box w="70%" bg="green.500">
 				<div>
 					<h1>Twitch Chat</h1>
-					<ul>
+					<Bar data={data}></Bar>
+					{/* <ul>
 						{messages.map((msg, index) => (
 							<li key={index}>
 								<strong>{msg.user}:</strong> {msg.message}
 							</li>
 						))}
-					</ul>
+					</ul> */}
 				</div>
 			</Box>
 			<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
