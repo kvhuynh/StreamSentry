@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { readChat } from "../services/twitch.service.api";
 import socketIo from "socket.io-client";
+import { socket } from "../socket"
 interface Message {
 	user: string;
 	message: string;
@@ -14,9 +15,9 @@ export const Channel: React.FC = () => {
 
 	let ignore = false;
 
-	const socket = socketIo("http://localhost:8000", {
-		transports: ["websocket"],
-	});
+	// const socket = socketIo("http://localhost:8000", {
+	// 	transports: ["websocket"],
+	// });
 
 	useEffect(() => {
 		socket.connect();
