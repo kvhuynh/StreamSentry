@@ -13,7 +13,7 @@ import {
 	Tooltip,
 	// Legend,
 } from "chart.js";
-import faker from "faker";
+
 
 ChartJS.register(
 	CategoryScale,
@@ -31,40 +31,80 @@ interface Message {
 
 export const Channel: React.FC = () => {
 	const [messages, setMessages] = useState<Message[]>([]);
-	const [user, setUser] = useState<any>([]);
+	const [user, setUser] = useState<string[]>([]);
+  const [words, setWords] = useState<object>({});
+  // const [words, setWords] = useState<any>([]);
 	const { state } = useLocation();
 
 	let ignore = false;
 
-	const labels = user;
+	// const labels = user;
 
+	// const data = {
+	// 	labels,
+	// 	datasets: [
+	// 		{
+	// 			labels: "dataset 1",
+	// 			data: labels.map((labels) => labels.length),
+  //       backgroundColor: 'rgb(255, 99, 132)',
+  //       stack: 'Stack 0',
+	// 		},
+	// 	],
+	// };
+
+	const labels = Object.keys(words);
+  // console.log(labels);
+  console.log(words);
+  
+  
 	const data = {
-		labels,
+		// labels,
 		datasets: [
 			{
 				labels: "dataset 1",
-				data: labels.map((label) => label.length),
+				// data: labels.map((key: any) => [key, words[key]]),
+				data: words,
+
         backgroundColor: 'rgb(255, 99, 132)',
         stack: 'Stack 0',
 			},
 		],
 	};
 
-	useEffect(() => {
-		socket.connect();
-		socket.on("connect", () => {
-			console.log("Connected to Socket.io server");
-			console.log(socket.id);
-		});
-	}, []);
+	// useEffect(() => {
+	// 	const handleNewMessage = (msg: Message) => {
+	// 		setMessages((prevMessages) => [...prevMessages, msg]);
+	// 		setUser((prevUser: string[]) => [...prevUser, msg.user]);
+
+	// 	};
+	// 	socket.on("message", handleNewMessage);
+  //   return () => {
+  //     socket.off("message", handleNewMessage);
+  // };
+	// }, []);
 
 	useEffect(() => {
-		const handleNewMessage = (msg: Message) => {
-			setMessages((prevMessages) => [...prevMessages, msg]);
-			setUser((prevUser) => [...prevUser, msg.user]);
+		const handleNewMessage = (words: object) => {
+  
+      setWords(words)
+      // setWords((prevWords) => ({ ...prevWords, ...words }))
+      
 		};
-		socket.on("message", handleNewMessage);
-	}, []); // This useEffect runs only once when the component mounts
+		socket.on("words", handleNewMessage);
+    return () => {
+      socket.off("words", handleNewMessage);
+  };
+	}, []);
+
+  // useEffect(() => {
+  //   const handleWords = (words) => {
+  //     setWords((prevWords) => [...prevWords, words])
+  //   }
+  //   socket.on("words", handleWords);
+  //   return () => {
+  //     socket.off("words, handleWords")
+  //   }
+  // }, [])
 
 	useEffect(() => {
 		if (!ignore) {
@@ -88,6 +128,7 @@ export const Channel: React.FC = () => {
 							</li>
 						))}
 					</ul> */}
+
 				</div>
 			</Box>
 			<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>

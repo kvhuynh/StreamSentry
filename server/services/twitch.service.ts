@@ -52,20 +52,38 @@ export const readChat = (channelName: string) => {
 
 	client.connect();
 
-	let words: any = [];
+	let words: any = {};
+    setInterval(() => {
+        words = {}
+    }, 10000)
 	client.on("message", (channel: any, tags: any, message: any, self: any) => {
 		// Emit message to connected clients
-		// console.log({ user: tags['display-name'], message });
-		for (let word in message.split(" ")) {
-			words.push(message.split(" ")[word]);
-			// console.log();
+        const strippedMsg: string = message.split(" ")
+		for (let i: number = 0; i < strippedMsg.length; i++) {
+			// words.push(message.split(" ")[word]);
+            if (!words[strippedMsg[i]]) {
+                words[strippedMsg[i]] = 1;
+            } else {
+                words[strippedMsg[i]] = words[strippedMsg[i]] += 1;
+            }
 		}
-        // words = { user: tags['display-name'], message }
+        const entries: any[] = Object.entries(words);
+
+        // Sort the array based on the values in descending order
+        entries.sort((a, b) => b[1] - a[1]);
+      
+        // Slice the array to get the top 10 elements
+        const top10 = entries.slice(0, 5);
+      
+        // Convert the sliced array back into an object
+        const result = Object.fromEntries(top10);
+        // console.log(result);
+
+        // set a timer and reset the words after a certain period
         
-		io.emit('message', { user: tags['display-name'], message });
-        // io.emit('message', words);
+        // return result;
+		// io.emit('message', { user: tags['display-name'], message });
+        io.emit("words", result);
 
 	});
-        // io.emit('message', words);
-
 };
