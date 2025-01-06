@@ -32,7 +32,9 @@ export const Home: React.FC = () => {
 	return (
 		<Wrap justify={"center"}>
 			{/* <Center> */}
-			{channels.map((channel: unknown, i: number) => {
+			{channels.map((channel: any, i: number) => {
+				console.log(channel.user_id);
+				
 				return (
 					<Link
 						as={NavLink}

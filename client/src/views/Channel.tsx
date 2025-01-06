@@ -37,28 +37,8 @@ export const Channel: React.FC = () => {
 	const { state } = useLocation();
 
 	let ignore = false;
-
-	// const labels = user;
-
-	// const data = {
-	// 	labels,
-	// 	datasets: [
-	// 		{
-	// 			labels: "dataset 1",
-	// 			data: labels.map((labels) => labels.length),
-  //       backgroundColor: 'rgb(255, 99, 132)',
-  //       stack: 'Stack 0',
-	// 		},
-	// 	],
-	// };
-
-	const labels = Object.keys(words);
-  // console.log(labels);
-  console.log(words);
-  
-  
+    
 	const data = {
-		// labels,
 		datasets: [
 			{
 				labels: "dataset 1",

@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import SevenTV from "7tv";
 
+// Returns Connection interface,
 const tmi = require("tmi.js");
 // const server = http.createServer(app);
 const socketIo = require("socket.io");
@@ -40,11 +42,12 @@ export const getPopularChannels = async () => {
 };
 
 const parsePopularChannels = (data: object) => {
-	console.log(data);
+	// console.log(data);
 };
 
 export const readChat = (channelName: string) => {
 	console.log(channelName);
+	// !!!ping twitch api to retrieve userId
     const io = require('../config/socket.config').getio();
 	const client = new tmi.Client({
 		channels: [channelName],
@@ -58,7 +61,7 @@ export const readChat = (channelName: string) => {
     }, 10000)
 	client.on("message", (channel: any, tags: any, message: any, self: any) => {
 		// Emit message to connected clients
-        const strippedMsg: string = message.split(" ")
+        const strippedMsg: string = message.split(" ");
 		for (let i: number = 0; i < strippedMsg.length; i++) {
 			// words.push(message.split(" ")[word]);
             if (!words[strippedMsg[i]]) {
