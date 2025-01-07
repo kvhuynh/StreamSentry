@@ -87,8 +87,10 @@ export const Channel: React.FC = () => {
   // }, [])
 
 	useEffect(() => {
+		console.log(state.channel);
+		
 		if (!ignore) {
-			readChat(state.channel.user_name);
+			readChat(state.channel.user_name, state.channel.user_id);
 		}
 		return () => {
 			ignore = true;

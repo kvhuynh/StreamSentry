@@ -45,10 +45,19 @@ const parsePopularChannels = (data: object) => {
 	// console.log(data);
 };
 
-export const readChat = (channelName: string) => {
-	console.log(channelName);
-	// !!!ping twitch api to retrieve userId
-    const io = require('../config/socket.config').getio();
+export const loadEmotes = (channelId: string) => {
+	SevenTV.getTwitchUser(channelId)
+		.then((data: any) => {
+			console.log(data);
+			return data;
+		})
+		.catch((error) => {
+			console.log("7tv is not enabled on this channel");
+		});
+};
+
+export const readChat = (channelName: string, channelId: string) => {
+	const io = require("../config/socket.config").getio();
 	const client = new tmi.Client({
 		channels: [channelName],
 	});
@@ -56,37 +65,36 @@ export const readChat = (channelName: string) => {
 	client.connect();
 
 	let words: any = {};
-    setInterval(() => {
-        words = {}
-    }, 10000)
+	setInterval(() => {
+		words = {};
+	}, 10000);
 	client.on("message", (channel: any, tags: any, message: any, self: any) => {
 		// Emit message to connected clients
-        const strippedMsg: string = message.split(" ");
+		const strippedMsg: string = message.split(" ");
 		for (let i: number = 0; i < strippedMsg.length; i++) {
 			// words.push(message.split(" ")[word]);
-            if (!words[strippedMsg[i]]) {
-                words[strippedMsg[i]] = 1;
-            } else {
-                words[strippedMsg[i]] = words[strippedMsg[i]] += 1;
-            }
+			if (!words[strippedMsg[i]]) {
+				words[strippedMsg[i]] = 1;
+			} else {
+				words[strippedMsg[i]] = words[strippedMsg[i]] += 1;
+			}
 		}
-        const entries: any[] = Object.entries(words);
+		const entries: any[] = Object.entries(words);
 
-        // Sort the array based on the values in descending order
-        entries.sort((a, b) => b[1] - a[1]);
-      
-        // Slice the array to get the top 10 elements
-        const top10 = entries.slice(0, 5);
-      
-        // Convert the sliced array back into an object
-        const result = Object.fromEntries(top10);
-        // console.log(result);
+		// Sort the array based on the values in descending order
+		entries.sort((a, b) => b[1] - a[1]);
 
-        // set a timer and reset the words after a certain period
-        
-        // return result;
+		// Slice the array to get the top 10 elements
+		const top10 = entries.slice(0, 5);
+
+		// Convert the sliced array back into an object
+		const result = Object.fromEntries(top10);
+		// console.log(result);
+
+		// set a timer and reset the words after a certain period
+
+		// return result;
 		// io.emit('message', { user: tags['display-name'], message });
-        io.emit("words", result);
-
+		io.emit("words", result);
 	});
 };

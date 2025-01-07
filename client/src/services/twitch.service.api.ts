@@ -15,11 +15,12 @@ export const getPopularChannels = async () => {
 	}
 };
 
-export const readChat = async (channelName: string) => {
-	try {
+export const readChat = async (channelName: string, channelId: string) => {
+	try {		
 		const res = await http.get("/readChat", {
 			params: {
-				channelName: channelName
+				channelName: channelName,
+				channelId: channelId
 			}
 		});
 		console.log(res.data);
