@@ -51,18 +51,6 @@ export const Channel: React.FC = () => {
 		],
 	};
 
-	// useEffect(() => {
-	// 	const handleNewMessage = (msg: Message) => {
-	// 		setMessages((prevMessages) => [...prevMessages, msg]);
-	// 		setUser((prevUser: string[]) => [...prevUser, msg.user]);
-
-	// 	};
-	// 	socket.on("message", handleNewMessage);
-  //   return () => {
-  //     socket.off("message", handleNewMessage);
-  // };
-	// }, []);
-
 	useEffect(() => {
 		const handleNewMessage = (words: object) => {
   
@@ -75,16 +63,6 @@ export const Channel: React.FC = () => {
       socket.off("words", handleNewMessage);
   };
 	}, []);
-
-  // useEffect(() => {
-  //   const handleWords = (words) => {
-  //     setWords((prevWords) => [...prevWords, words])
-  //   }
-  //   socket.on("words", handleWords);
-  //   return () => {
-  //     socket.off("words, handleWords")
-  //   }
-  // }, [])
 
 	useEffect(() => {
 		console.log(state.channel);

@@ -45,10 +45,11 @@ const parsePopularChannels = (data: object) => {
 	// console.log(data);
 };
 
-export const loadEmotes = (channelId: string) => {
-	SevenTV.getTwitchUser(channelId)
+export const getEmotes = (channelId: string) => {
+
+		SevenTV.getEmotes(channelId)
 		.then((data: any) => {
-			console.log(data);
+			// console.log(data[2].data.host.files);
 			return data;
 		})
 		.catch((error) => {
