@@ -5,6 +5,31 @@ import SevenTV from "7tv";
 const tmi = require("tmi.js");
 const socketIo = require("socket.io");
 
+
+const socketIoClient = require("socket.io-client");
+
+const fastApiSocket = socketIoClient("http://localhost:8000", {
+	transports: ["websocket", "polling"],  // Specify transport methods explicitly
+  });
+
+fastApiSocket.on("connect", () => {
+  console.log("Connected to FastAPI server");
+  fastApiSocket.emit("message", {message:"hello"})
+});
+
+fastApiSocket.on("disconnect", () => {
+  console.log("Disconnected from FastAPI server");
+});
+
+fastApiSocket.on("sentiment_result", (data: any) => {
+  console.log("Received response from FastAPI:", data);
+});
+
+// You can emit data here as well
+fastApiSocket.emit("message", { username: "someUser", message: "Hello FastAPI" });
+
+
+
 // let io: any
 let http: AxiosInstance = axios.create({
 	baseURL: "https://api.twitch.tv/",
@@ -98,7 +123,12 @@ export const readChat = (channelName: string, channelId: string) => {
 		// return result;
 		// io.emit('message', { user: tags['display-name'], message });
 		// io.emit("words", result);
-		io.emit("message", {
+		// io.emit("message", {
+		// 	username: tags.username,
+		// 	message: message
+		// });
+
+		fastApiSocket.emit("message", {
 			username: tags.username,
 			message: message
 		});

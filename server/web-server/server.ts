@@ -19,24 +19,4 @@ httpServer.listen(port, () => {
 });
 
 
-const socketIoClient = require("socket.io-client");
 
-const fastApiSocket = socketIoClient("http://localhost:8000", {
-	transports: ["websocket", "polling"],  // Specify transport methods explicitly
-  });
-
-fastApiSocket.on("connect", () => {
-  console.log("Connected to FastAPI server");
-  fastApiSocket.emit("message", {message:"hello"})
-});
-
-fastApiSocket.on("disconnect", () => {
-  console.log("Disconnected from FastAPI server");
-});
-
-fastApiSocket.on("response", (data: any) => {
-  console.log("Received response from FastAPI:", data);
-});
-
-// You can emit data here as well
-fastApiSocket.emit("message", { username: "someUser", message: "Hello FastAPI" });
