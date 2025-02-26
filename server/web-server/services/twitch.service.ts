@@ -70,7 +70,7 @@ export const getEmotes = (channelId: string) => {
 };
 
 export const readChat = (channelName: string, channelId: string) => {
-	const io = require("../config/socket.config").getio();
+	// const io = require("../config/socket.config").getio();
 	const client = new tmi.Client({
 		channels: [channelName],
 	});
@@ -107,12 +107,12 @@ export const readChat = (channelName: string, channelId: string) => {
 		// set a timer and reset the words after a certain period
 
 		// return result;
-		io.emit('message', { user: tags['display-name'], message });
-		io.emit("words", result);
-		io.emit("message", {
-			username: tags.username,
-			message: message
-		});
+		// io.emit('message', { user: tags['display-name'], message });
+		// io.emit("words", result);
+		// io.emit("message", {
+		// 	username: tags.username,
+		// 	message: message
+		// });
 
 		fastApiSocket.emit("message", {
 			username: tags.username,
