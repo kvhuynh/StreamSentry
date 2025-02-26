@@ -33,9 +33,9 @@ async def message(sid, data):
     print(data);
 
     sentiment_score = analyzer.polarity_scores(message)
-    sentiment = "positive" if sentiment_score["compound"] > 0.05 else "negative" if sentiment_score["compound"] < -0.05 else "neutral"
+    # sentiment = "positive" if sentiment_score["compound"] > 0.05 else "negative" if sentiment_score["compound"] < -0.05 else "neutral"
 
-    response = {"username": username, "message": message, "sentiment": sentiment}
+    response = {"username": username, "message": message, "sentiment": sentiment_score}
     print(f"Sentiment Analysis: {response}")
 
     # Send the sentiment result back

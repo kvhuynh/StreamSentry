@@ -14,7 +14,6 @@ import {
 	// Legend,
 } from "chart.js";
 
-
 ChartJS.register(
 	CategoryScale,
 	LinearScale,
@@ -32,12 +31,12 @@ interface Message {
 export const Channel: React.FC = () => {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [user, setUser] = useState<string[]>([]);
-  const [words, setWords] = useState<object>({});
-  // const [words, setWords] = useState<any>([]);
+	const [words, setWords] = useState<object>({});
+	// const [words, setWords] = useState<any>([]);
 	const { state } = useLocation();
 
 	let ignore = false;
-    
+
 	const data = {
 		datasets: [
 			{
@@ -45,28 +44,28 @@ export const Channel: React.FC = () => {
 				// data: labels.map((key: any) => [key, words[key]]),
 				data: words,
 
-        backgroundColor: 'rgb(255, 99, 132)',
-        stack: 'Stack 0',
+				backgroundColor: "rgb(255, 99, 132)",
+				stack: "Stack 0",
 			},
 		],
 	};
 
 	useEffect(() => {
 		const handleNewMessage = (words: object) => {
-  
-      setWords(words)
-      // setWords((prevWords) => ({ ...prevWords, ...words }))
-      
+			console.log("test");
+			
+			setWords(words);
+			// setWords((prevWords) => ({ ...prevWords, ...words }))
 		};
 		socket.on("words", handleNewMessage);
-    return () => {
-      socket.off("words", handleNewMessage);
-  };
+		return () => {
+			socket.off("words", handleNewMessage);
+		};
 	}, []);
 
 	useEffect(() => {
 		console.log(state.channel);
-		
+
 		if (!ignore) {
 			readChat(state.channel.user_name, state.channel.user_id);
 		}
@@ -88,7 +87,6 @@ export const Channel: React.FC = () => {
 							</li>
 						))}
 					</ul> */}
-
 				</div>
 			</Box>
 			<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>

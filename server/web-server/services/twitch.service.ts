@@ -5,30 +5,24 @@ import SevenTV from "7tv";
 const tmi = require("tmi.js");
 const socketIo = require("socket.io");
 
-
 const socketIoClient = require("socket.io-client");
 
 const fastApiSocket = socketIoClient("http://localhost:8000", {
-	transports: ["websocket", "polling"],  // Specify transport methods explicitly
-  });
+	transports: ["websocket", "polling"], // Specify transport methods explicitly
+});
 
 fastApiSocket.on("connect", () => {
-  console.log("Connected to FastAPI server");
-  fastApiSocket.emit("message", {message:"hello"})
+	console.log("Connected to FastAPI server");
+	fastApiSocket.emit("message", { message: "hello" });
 });
 
 fastApiSocket.on("disconnect", () => {
-  console.log("Disconnected from FastAPI server");
+	console.log("Disconnected from FastAPI server");
 });
 
 fastApiSocket.on("sentiment_result", (data: any) => {
-  console.log("Received response from FastAPI:", data);
+	console.log("Received response from FastAPI:", data);
 });
-
-// You can emit data here as well
-fastApiSocket.emit("message", { username: "someUser", message: "Hello FastAPI" });
-
-
 
 // let io: any
 let http: AxiosInstance = axios.create({
@@ -58,20 +52,14 @@ export const getPopularChannels = async () => {
 		await checkAuthorizationToken(http);
 
 		const res = await http.get(`helix/streams?"first=100`);
-		parsePopularChannels(res.data);
 		return res.data;
 	} catch (error: any) {
 		console.log(error);
 	}
 };
 
-const parsePopularChannels = (data: object) => {
-	// console.log(data);
-};
-
 export const getEmotes = (channelId: string) => {
-
-		SevenTV.getEmotes(channelId)
+	SevenTV.getEmotes(channelId)
 		.then((data: any) => {
 			// console.log(data[2].data.host.files);
 			return data;
@@ -80,8 +68,6 @@ export const getEmotes = (channelId: string) => {
 			console.log("7tv is not enabled on this channel");
 		});
 };
-
-
 
 export const readChat = (channelName: string, channelId: string) => {
 	const io = require("../config/socket.config").getio();
@@ -121,16 +107,16 @@ export const readChat = (channelName: string, channelId: string) => {
 		// set a timer and reset the words after a certain period
 
 		// return result;
-		// io.emit('message', { user: tags['display-name'], message });
-		// io.emit("words", result);
-		// io.emit("message", {
-		// 	username: tags.username,
-		// 	message: message
-		// });
+		io.emit('message', { user: tags['display-name'], message });
+		io.emit("words", result);
+		io.emit("message", {
+			username: tags.username,
+			message: message
+		});
 
 		fastApiSocket.emit("message", {
 			username: tags.username,
-			message: message
+			message: message,
 		});
 	});
 };
