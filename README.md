@@ -1,4 +1,8 @@
-# live-twitch-analysis
+# Stream Sentry
+
+
+
+
 
 <!-- creating a venv -->
 python3 -m venv .venv
