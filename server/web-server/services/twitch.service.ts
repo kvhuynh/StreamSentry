@@ -34,6 +34,8 @@ let http: AxiosInstance = axios.create({
 });
 
 const generateAuthorizationToken = async (http: AxiosInstance) => {
+	console.log("fsdfsdfsdf");
+	
 	const res: AxiosResponse = await axios.post(
 		`https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&grant_type=client_credentials`
 	);
@@ -43,6 +45,8 @@ const generateAuthorizationToken = async (http: AxiosInstance) => {
 
 const checkAuthorizationToken = async (http: AxiosInstance) => {
 	if (http.defaults.headers.Authorization === undefined) {
+		console.log("sdfsdfsdf");
+		
 		await generateAuthorizationToken(http);
 	}
 };

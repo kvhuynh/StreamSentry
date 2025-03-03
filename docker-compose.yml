@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  web-server:
+    build: ./server/web-server
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - sentiment-server
+    volumes:
+      - ./server/web-server:/app
+      - /app/node_modules
+
+  sentiment-server:
+    build: ./server/sentiment-server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server/sentiment-server:/app
+
+  client:
+    build: ./client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - web-server
+    volumes:
+      - ./client:/app
+      - /app/node_modules

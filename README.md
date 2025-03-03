@@ -1,11 +1,6 @@
-# Stream Sentry
+# StreamSentry
 
 
-
-
-
-<!-- creating a venv -->
-python3 -m venv .venv
 
 <!-- activate virtual environment -->
 source venv/Scripts/activate

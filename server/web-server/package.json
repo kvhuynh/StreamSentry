@@ -12,6 +12,8 @@
     "websocket": "^1.0.34"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7"
+    "@types/node": "^20.12.7",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2"
   }
 }
