@@ -21,6 +21,7 @@ import {
 	Link,
 } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
+import { socket } from "../socket";
 
 export const Home: React.FC = () => {
 	const [channels, setChannels] = useState<Array<unknown>>([]);
@@ -28,19 +29,18 @@ export const Home: React.FC = () => {
 		getPopularChannels().then((popularChannels: object) => {
 			setChannels(popularChannels);
 		});
+		socket.on("connection", () => {
+			console.log("connected to fronend");
+		});
 	}, []);
 	return (
 		<Wrap justify={"center"}>
 			{/* <Center> */}
 			{channels.map((channel: any, i: number) => {
 				console.log(channel.user_id);
-				
+
 				return (
-					<Link
-						as={NavLink}
-						to={channel.user_name}
-                        state={{ channel }}
-					>
+					<Link as={NavLink} to={channel.user_name} state={{ channel }}>
 						<Card data-type="Card" maxW={400} key={i}>
 							<CardBody data-type="CardBody">
 								<Image

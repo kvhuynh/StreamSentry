@@ -1,30 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import SevenTV from "7tv";
+import fastApiSocket from "../sentimentClient";
+import socketHandler from "../sockets/socketHandler";
 
-// Returns Connection interface,
 const tmi = require("tmi.js");
-const socketIo = require("socket.io");
 
-const socketIoClient = require("socket.io-client");
-
-const fastApiSocket = socketIoClient("http://localhost:8000", {
-	transports: ["websocket", "polling"], // Specify transport methods explicitly
-});
-
-fastApiSocket.on("connect", () => {
-	console.log("Connected to FastAPI server");
-	fastApiSocket.emit("message", { message: "hello" });
-});
-
-fastApiSocket.on("disconnect", () => {
-	console.log("Disconnected from FastAPI server");
-});
-
-fastApiSocket.on("sentiment_result", (data: any) => {
-	console.log("Received response from FastAPI:", data);
-});
-
-// let io: any
 let http: AxiosInstance = axios.create({
 	baseURL: "https://api.twitch.tv/",
 	headers: {
@@ -33,8 +13,8 @@ let http: AxiosInstance = axios.create({
 	},
 });
 
+
 const generateAuthorizationToken = async (http: AxiosInstance) => {
-	console.log("fsdfsdfsdf");
 	
 	const res: AxiosResponse = await axios.post(
 		`https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_CLIENT_SECRET}&grant_type=client_credentials`

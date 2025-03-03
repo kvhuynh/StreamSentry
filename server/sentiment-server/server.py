@@ -17,10 +17,10 @@ analyzer = SentimentIntensityAnalyzer()
 
 @sio.event
 async def connect(sid, environ):
-    print(f"Client connected: {sid}")
+    print(f"✅ Client connected: {sid}")
 @sio.event
 async def disconnect(sid):
-    print(f"Client disconnected: {sid}")
+    print(f"⚠️ Client disconnected: {sid}")
 
 # @sio.event
 # async def message(sid, data):
@@ -31,7 +31,6 @@ async def message(sid, data):
     """Receives messages from the Twitch bot and processes sentiment."""
     username = data.get("username", "Unknown")
     message = data.get("message", "")
-    print(data);
 
     sentiment_score = analyzer.polarity_scores(message)
     # sentiment = "positive" if sentiment_score["compound"] > 0.05 else "negative" if sentiment_score["compound"] < -0.05 else "neutral"
