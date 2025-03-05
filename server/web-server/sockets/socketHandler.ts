@@ -12,6 +12,11 @@ export default function socketHandler(io: Server) {
     //   sentimentService.sendMessage(data.username, data.message);
     // });
 
+    socket.on("words", () => {
+      console.log("fasdfasdfasdf");
+      
+    })
+
     socket.on("disconnect", () => console.log("⚠️ Frontend disconnected:", socket.id));
   });
 }
