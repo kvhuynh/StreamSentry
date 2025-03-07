@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import SevenTV from "7tv";
 import fastApiSocket from "../sentimentClient";
-import socketHandler from "../sockets/socketHandler";
+import { emitEvent } from "../sockets/socketHandler";
 
 const tmi = require("tmi.js");
 
@@ -102,5 +102,6 @@ export const readChat = (channelName: string, channelId: string) => {
 			username: tags.username,
 			message: message,
 		});
+		
 	});
 };

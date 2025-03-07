@@ -1,5 +1,6 @@
 import config from "./config/config";
 import { io as socketIoClient } from "socket.io-client";
+import { emitEvent } from "./sockets/socketHandler";
 
 const fastApiSocket = socketIoClient(config.sentimentServerUrl, {
     transports: ["websocket", "polling"], // Specify transport methods explicitly
@@ -16,6 +17,7 @@ fastApiSocket.on("disconnect", () => {
 
 fastApiSocket.on("sentiment_result", (data: any) => {
     console.log("Received response from FastAPI:", data);
+    emitEvent("test", data);
 });
 
 export default fastApiSocket;

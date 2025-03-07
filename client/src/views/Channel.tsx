@@ -58,7 +58,11 @@ export const Channel: React.FC = () => {
 			// setWords((prevWords) => ({ ...prevWords, ...words }))
 		};
 
-		socket.on("words", handleNewMessage);
+		// socket.on("words", handleNewMessage);
+		socket.on("test", (payload) => {
+			console.log(payload);
+			
+		})
 		return () => {
 			socket.off("words", handleNewMessage);
 		};
