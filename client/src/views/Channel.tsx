@@ -24,9 +24,11 @@ ChartJS.register(
 	// Legend
 );
 
-interface Message {
-	user: string;
-	message: string;
+type DataSet = {
+	label: string,
+	data: Array<object>[]
+	borderColor: string,
+	backgroundColor: string
 }
 
 export const Channel: React.FC = () => {
@@ -35,7 +37,7 @@ export const Channel: React.FC = () => {
 
 	const [chartData, setChartData] = useState<{
 		labels: string[];
-		datasets: any[];
+		datasets: Array<DataSet>;
 	}>({
 		labels: [],
 		datasets: [
@@ -44,28 +46,28 @@ export const Channel: React.FC = () => {
 				data: [],
 				borderColor: "rgb(255, 99, 132)", // Red
 				backgroundColor: "rgba(255, 99, 132, 0.2)",
-				tension: 0.4,
+				// tension: 0,
 			},
 			{
 				label: "Neutral",
 				data: [],
 				borderColor: "rgb(128, 128, 128)", // Gray
 				backgroundColor: "rgba(128, 128, 128, 0.2)",
-				tension: 0.4,
+				// tension: 0,
 			},
 			{
 				label: "Positive",
 				data: [],
 				borderColor: "rgb(75, 192, 192)", // Green
 				backgroundColor: "rgba(75, 192, 192, 0.2)",
-				tension: 0.4,
+				// tension: 0,
 			},
 			{
 				label: "Compound",
 				data: [],
 				borderColor: "rgb(54, 162, 235)", // Blue
 				backgroundColor: "rgba(54, 162, 235, 0.2)",
-				tension: 0.4,
+				// tension: 0.4,
 			},
 		],
 	});
@@ -109,6 +111,7 @@ export const Channel: React.FC = () => {
 			duration: 0,
 		},
 		responsive: true,
+		
 		scales: {
 			y: {
 				min: -1.5,
@@ -132,17 +135,18 @@ export const Channel: React.FC = () => {
 
 	return (
 		<Flex color="white" h={"100vh"}>
-			<h2>Real-Time Sentiment Analysis</h2>
 			<Box w="70%">
 				<Line data={chartData} options={options} />
 			</Box>
 			<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
 				<iframe
 					src={`https://chatis.is2511.com/v2/?channel=${state.channel.user_name}&animate=true&bots=true&size=1&font=3&shadow=3`}
-					width="100%"
+					// width="100%"
 					height="100%"
 				></iframe>
 			</Box>
 		</Flex>
 	);
 };
+
+export default Channel;
