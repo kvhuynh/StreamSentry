@@ -17,7 +17,7 @@ fastApiSocket.on("disconnect", () => {
 
 fastApiSocket.on("sentiment_result", (data: any) => {
     console.log("Received response from FastAPI:", data);
-    emitEvent("test", data);
+    emitEvent("sentiment_data", data);
 });
 
 export default fastApiSocket;
