@@ -36,20 +36,18 @@ export const Home: React.FC = () => {
 		});
 	}, []);
 
-	const onChange = (event) => {
+	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value;
 		setInput(value);
 		console.log(input);
-		
-	}
+	};
 
-	const onSubmit = (event) => {
-		event.preventDefault()
+	const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
 		console.log("sdfs");
-		
-		navigate(`/${input}`)
-	}
 
+		navigate(`/${input}`);
+	};
 
 	return (
 		<Flex
@@ -71,10 +69,13 @@ export const Home: React.FC = () => {
 				 */}
 				<HStack gap="10" width="full">
 					<form onSubmit={onSubmit}>
-
 						<InputGroup>
 							<InputLeftElement children={<LuSearch />} />
-							<Input placeholder="Search contacts" w={"25vw"} onChange={(event) => onChange(event)} />
+							<Input
+								placeholder="Search streamers"
+								w={"25vw"}
+								onChange={(event) => onChange(event)}
+							/>
 						</InputGroup>
 					</form>
 				</HStack>

@@ -26,12 +26,12 @@ export const getEmotes = async () => {
 	}
 }
 
-export const readChat = async (channelName: string, channelId: string) => {
+export const readChat = async (channelName: string) => {
 	try {		
 		const res = await http.get("/readChat", {
 			params: {
 				channelName: channelName,
-				channelId: channelId
+				// channelId: channelId
 			}
 		});
 		console.log(res.data);
