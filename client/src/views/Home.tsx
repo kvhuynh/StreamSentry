@@ -18,11 +18,15 @@ import {
 } from "@chakra-ui/react";
 import { LuSearch } from "react-icons/lu";
 
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { socket } from "../socket";
+import { OptionalChainingExpression } from "./../../node_modules/@swc/types/index.d";
 
 export const Home: React.FC = () => {
 	const [channels, setChannels] = useState<Array<unknown>>([]);
+	const [input, setInput] = useState<string>();
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		getPopularChannels().then((popularChannels: object) => {
 			setChannels(popularChannels);
@@ -31,6 +35,22 @@ export const Home: React.FC = () => {
 			console.log("connected to fronend");
 		});
 	}, []);
+
+	const onChange = (event) => {
+		const value = event.target.value;
+		setInput(value);
+		console.log(input);
+		
+	}
+
+	const onSubmit = (event) => {
+		event.preventDefault()
+		console.log("sdfs");
+		
+		navigate(`/${input}`)
+	}
+
+
 	return (
 		<Flex
 			// minHeight="100vh"
@@ -50,19 +70,20 @@ export const Home: React.FC = () => {
 				{/* <Input width="25vw" placeholder="filler"></Input>
 				 */}
 				<HStack gap="10" width="full">
-					<InputGroup>
-						<InputLeftElement
-							children={<LuSearch/>}
-						/>
-						<Input placeholder="Search contacts" w={"25vw"} />
-					</InputGroup>
+					<form onSubmit={onSubmit}>
+
+						<InputGroup>
+							<InputLeftElement children={<LuSearch />} />
+							<Input placeholder="Search contacts" w={"25vw"} onChange={(event) => onChange(event)} />
+						</InputGroup>
+					</form>
 				</HStack>
 			</Flex>
 
 			{/* Content Below */}
 			<Wrap justify="center" pb={4}>
 				{channels.map((channel: any, i: number) => {
-					console.log(channel.user_id);
+					// console.log(channel.user_id);
 
 					return (
 						<Link
