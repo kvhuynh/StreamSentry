@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import {
 	Chart as ChartJS,
@@ -88,15 +88,54 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 		},
 	};
 
+	const isMounted = useRef(false);
 	useEffect(() => {
-		readChat(channelName);
-	}, []);
+		if (!isMounted.current) {
+			readChat(channelName);
+		}
+		isMounted.current = true;
+	}, [channelName]);
 
+
+	// useEffect(() => {
+	// 	// readChat(channelName)
+
+	// 	socket.on("sentiment_data", (newData) => {
+	// 		console.log("ddddd");
+
+	// 		setChartData((prev) => {
+	// 			const newLabels = [
+	// 				...prev.labels,
+	// 				new Date().toLocaleTimeString(),
+	// 			].slice(-30);
+
+	// 			const sentimentValues = [
+	// 				newData.sentiment.neg,
+	// 				newData.sentiment.neu,
+	// 				newData.sentiment.pos,
+	// 				newData.sentiment.compound,
+	// 			];
+
+	// 			return {
+	// 				labels: newLabels,
+	// 				datasets: prev.datasets.map((dataset, index) => {
+	// 					const newDataset = [...dataset.data, sentimentValues[index]].slice(
+	// 						-30
+	// 					);
+	// 					return { ...dataset, data: newDataset };
+	// 				}),
+	// 			};
+	// 		});
+	// 	});
+
+	// 	return () => {
+	// 		socket.off("sentiment_data");
+	// 	};
+	// }, [socket]);
 	useEffect(() => {
-		// readChat(channelName)
-
-		socket.on("sentiment_data", (newData) => {
-			console.log("ddddd");
+		console.log("use effect trigger");
+		const handleSentimentData = (newData) => {
+			console.log("Received sentiment data:", newData);
 
 			setChartData((prev) => {
 				const newLabels = [
@@ -113,20 +152,21 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 
 				return {
 					labels: newLabels,
-					datasets: prev.datasets.map((dataset, index) => {
-						const newDataset = [...dataset.data, sentimentValues[index]].slice(
-							-30
-						);
-						return { ...dataset, data: newDataset };
-					}),
+					datasets: prev.datasets.map((dataset, index) => ({
+						...dataset,
+						data: [...dataset.data, sentimentValues[index]].slice(-30),
+					})),
 				};
 			});
-		});
+		};
+
+		socket.on("sentiment_data", handleSentimentData);
 
 		return () => {
-			socket.off("sentiment_data");
+			socket.off("sentiment_data", handleSentimentData);
 		};
-	}, []);
+	}, []); // Add socket as a dependency
+
 	return (
 		<div>
 			<h2>Sentiment Over Time</h2>

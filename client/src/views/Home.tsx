@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getPopularChannels } from "../services/twitch.service.api";
 import {
 	Card,
@@ -27,13 +27,20 @@ export const Home: React.FC = () => {
 	const [input, setInput] = useState<string>();
 	const navigate = useNavigate();
 
+	const isMounted = useRef(false);
+
 	useEffect(() => {
-		getPopularChannels().then((popularChannels: object) => {
-			setChannels(popularChannels);
-		});
-		socket.on("connection", () => {
-			console.log("connected to fronend");
-		});
+		if (!isMounted.current) {
+
+			getPopularChannels().then((popularChannels: object) => {
+				setChannels(popularChannels);
+			});
+			socket.on("connection", () => {
+				console.log("connected to fronend");
+			});
+		}
+		return () => {isMounted.current = true};
+
 	}, []);
 
 	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
