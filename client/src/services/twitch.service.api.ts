@@ -15,9 +15,13 @@ export const getPopularChannels = async () => {
 	}
 };
 
-export const getEmotes = async () => {
+export const getEmotes = async (channelId: string) => {
 	try {
-		const res = await http.get("/getEmotes");
+		const res = await http.get("/getEmotes", {
+			params: {
+				channelId: channelId
+			}
+		});
 		console.log(res.data.data);
 		
 	} catch (error) {

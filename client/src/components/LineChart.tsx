@@ -88,50 +88,14 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 		},
 	};
 
-	const isMounted = useRef(false);
-	useEffect(() => {
-		if (!isMounted.current) {
-			readChat(channelName);
-		}
-		isMounted.current = true;
-	}, [channelName]);
-
-
+	// const isMounted = useRef(false);
 	// useEffect(() => {
-	// 	// readChat(channelName)
+	// 	if (!isMounted.current) {
+	// 		readChat(channelName);
+	// 	}
+	// 	isMounted.current = true;
+	// }, [channelName]);
 
-	// 	socket.on("sentiment_data", (newData) => {
-	// 		console.log("ddddd");
-
-	// 		setChartData((prev) => {
-	// 			const newLabels = [
-	// 				...prev.labels,
-	// 				new Date().toLocaleTimeString(),
-	// 			].slice(-30);
-
-	// 			const sentimentValues = [
-	// 				newData.sentiment.neg,
-	// 				newData.sentiment.neu,
-	// 				newData.sentiment.pos,
-	// 				newData.sentiment.compound,
-	// 			];
-
-	// 			return {
-	// 				labels: newLabels,
-	// 				datasets: prev.datasets.map((dataset, index) => {
-	// 					const newDataset = [...dataset.data, sentimentValues[index]].slice(
-	// 						-30
-	// 					);
-	// 					return { ...dataset, data: newDataset };
-	// 				}),
-	// 			};
-	// 		});
-	// 	});
-
-	// 	return () => {
-	// 		socket.off("sentiment_data");
-	// 	};
-	// }, [socket]);
 	useEffect(() => {
 		console.log("use effect trigger");
 		const handleSentimentData = (newData) => {
@@ -164,6 +128,8 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 
 		return () => {
 			socket.off("sentiment_data", handleSentimentData);
+            console.log("sentiment_data disconnected");
+            
 		};
 	}, []); // Add socket as a dependency
 

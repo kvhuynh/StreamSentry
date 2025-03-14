@@ -32,21 +32,17 @@ export const getPopularChannels = async () => {
 	try {
 		await checkAuthorizationToken(http);
 
-		const res = await http.get(`helix/streams?"first=100`);
+		const res = await http.get(`helix/streams?"first=200`);
 		return res.data;
 	} catch (error: any) {
 		console.log(error);
 	}
 };
 
-export const getEmotes = (channelId: string) => {
-	SevenTV.getEmotes(channelId)
-		.then((data: any) => {
-			return data;
-		})
-		.catch((error) => {
-			console.log("7tv is not enabled on this channel");
-		});
+export const getEmotes = async (channelId: string) => {
+	const emotes = await http.get(`7tv.io/v3/users/twitch/${channelId}`);
+	console.log(emotes);
+	
 };
 
 export const readChat = (channelName: string, channelId: string) => {
