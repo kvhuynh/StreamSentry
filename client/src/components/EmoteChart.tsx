@@ -14,25 +14,28 @@ import { readChat } from "../services/twitch.service.api";
 import { useLocation, useParams } from "react-router-dom";
 
 type EmoteChartProps = {
-	socket: Socket; // Accept socket instance from Channel.tsx
-	channelName: string;
+	socket: Socket;
+	channelId: string;
 };
 
 export const EmoteChart: React.FC<EmoteChartProps> = ({
 	socket,
-	channelName,
+	channelId,
 }) => {
 	const { state } = useLocation();
-	let { channelNames } = useParams();
+	let { channelName } = useParams();
 
 	useEffect(() => {
-		const handleSentimentData = (newData) => {
-			socket.on("sentiment_data", handleSentimentData);
+		if (!channelName) {
+			// take channelName
+		}
+		// const handleSentimentData = (newData) => {
+		// 	socket.on("sentiment_data", handleSentimentData);
 
-			return () => {
-				socket.off("sentiment_data", handleSentimentData);
-			};
-		};
+		// 	return () => {
+		// 		socket.off("sentiment_data", handleSentimentData);
+		// 	};
+		// };
 	}, []);
 };
 

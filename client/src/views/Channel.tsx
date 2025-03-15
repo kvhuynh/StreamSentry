@@ -3,12 +3,17 @@ import "chart.js/auto";
 import { socket } from "../socket";
 import SentimentChart from "../components/LineChart";
 import { useLocation, useParams } from "react-router-dom";
-import { useEffect, useRef } from "react";
-import { readChat, getEmotes } from "../services/twitch.service.api";
+import { useEffect, useRef, useState } from "react";
+import {
+	readChat,
+	getEmotes,
+	getChannelId,
+} from "../services/twitch.service.api";
 
 export const Channel: React.FC = () => {
 	const { state } = useLocation();
 	let { channelName } = useParams();
+	const [channelId, setChannelId] = useState("");
 
 	const isMounted = useRef(false);
 
@@ -17,11 +22,16 @@ export const Channel: React.FC = () => {
 		if (state) {
 			console.log("asdfasdfasdfsdf");
 			channelName = state.channel.user_name;
+			setChannelId(state.channel.id);
+		} else {
+			getChannelId(channelName!).then((res: string) => {
+				setChannelId(res);
+			});
 		}
 
 		if (!isMounted.current) {
 			readChat(channelName!);
-			getEmotes(channelName!);
+			// getEmotes(channelName!);
 		}
 		isMounted.current = true;
 	}, []);
@@ -31,7 +41,7 @@ export const Channel: React.FC = () => {
 				<SentimentChart socket={socket} channelName={channelName!} />
 			</Box>
 			<Box w="70%">
-				{/* <EmoteChart socket={socket} channelName={channelName!} /> */}
+				{/* <EmoteChart socket={socket} channelName={channelId!} /> */}
 			</Box>
 			<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
 				{/* <iframe

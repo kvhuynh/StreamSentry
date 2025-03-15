@@ -22,8 +22,6 @@ const generateAuthorizationToken = async (http: AxiosInstance) => {
 
 const checkAuthorizationToken = async (http: AxiosInstance) => {
 	if (http.defaults.headers.Authorization === undefined) {
-		console.log("sdfsdfsdf");
-
 		await generateAuthorizationToken(http);
 	}
 };
@@ -39,10 +37,21 @@ export const getPopularChannels = async () => {
 	}
 };
 
+export const getChannelId = async (channelName: string) => {
+	try {
+		checkAuthorizationToken(http);
+		const channelId = await http.get(`helix/users?login=${channelName}`);
+		console.log(channelId.data.data[0].id);
+		return channelId.data.data[0].id
+	} catch (error: any) {
+		console.log(error);
+		
+	}
+}
+
 export const getEmotes = async (channelId: string) => {
 	const emotes = await http.get(`7tv.io/v3/users/twitch/${channelId}`);
 	console.log(emotes);
-	
 };
 
 export const readChat = (channelName: string, channelId: string) => {
