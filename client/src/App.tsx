@@ -9,7 +9,7 @@ function App() {
 			<Box margin={"0 auto"}>
 				<Routes>
 					<Route path="/" element={<Home />}></Route>
-					<Route path=":channelName" element={<Channel />}></Route>
+					<Route path="/:channelName" element={<Channel />}></Route>
 				</Routes>
 			</Box>
 		</ChakraProvider>

@@ -31,7 +31,7 @@ export const handleGetEmotes = async (req: any, res: any) => {
 
 export const handleReadChat = async (req: any, res: any) => {
 	try {
-		const chat = await readChat(req.query.channelName);
+		const chat = await readChat(req.query.channelName, req.query.socket);
 
 		return res.json(chat);
 	} catch (error: any) {

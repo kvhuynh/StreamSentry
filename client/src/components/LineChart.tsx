@@ -30,12 +30,14 @@ type DataSet = {
 
 type SentimentChartProps = {
 	socket: Socket; // Accept socket instance from Channel.tsx
+	leaveChannel: any;
 	channelName: string;
 };
 
 export const SentimentChart: React.FC<SentimentChartProps> = ({
 	socket,
 	channelName,
+
 }) => {
 	// 	const { state } = useLocation();
 	// 	let { channelName } = useParams();
@@ -99,7 +101,7 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 	useEffect(() => {
 		console.log("use effect trigger");
 		const handleSentimentData = (newData) => {
-			console.log("Received sentiment data:", newData);
+			// console.log("Received sentiment data:", newData);
 
 			setChartData((prev) => {
 				const newLabels = [
@@ -129,6 +131,7 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 		return () => {
 			socket.off("sentiment_data", handleSentimentData);
             console.log("sentiment_data disconnected");
+			// leaveChannel(channelName)
             
 		};
 	}, []); // Add socket as a dependency

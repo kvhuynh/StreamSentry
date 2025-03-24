@@ -23,4 +23,6 @@ export const emitEvent = (eventName: string, data: any) => {
 	}
 };
 
+// export const disconnect = ()
+
 export default { initializeSocket, emitEvent };

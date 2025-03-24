@@ -3,7 +3,7 @@ import { io as socketIoClient } from "socket.io-client";
 import { emitEvent } from "./sockets/socketHandler";
 
 const fastApiSocket = socketIoClient(config.sentimentServerUrl, {
-    transports: ["websocket", "polling"], // Specify transport methods explicitly
+    transports: ["websocket", "polling"]
 });
 
 fastApiSocket.on("connect", () => {
@@ -16,29 +16,8 @@ fastApiSocket.on("disconnect", () => {
 });
 
 fastApiSocket.on("sentiment_result", (data: any) => {
-    console.log("Received response from FastAPI:", data);
+    // console.log("Received response from FastAPI:", data);
     emitEvent("sentiment_data", data);
 });
 
 export default fastApiSocket;
-
-
-// import axios from "axios";
-// import config from "./config/config";
-
-// interface SentimentResponse {
-//   sentiment: string;
-//   confidence: number;
-// }
-
-// export default {
-//   async analyze(data: { username: string; message: string }): Promise<SentimentResponse> {
-//     try {
-//       const response = await axios.post<SentimentResponse>(`${config.sentimentServerUrl}/analyze`, data);
-//       return response.data;
-//     } catch (error) {
-//       console.error("Error contacting sentiment server:", (error as Error).message);
-//       throw error;
-//     }
-//   },
-// };

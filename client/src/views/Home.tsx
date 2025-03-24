@@ -21,6 +21,7 @@ import { LuSearch } from "react-icons/lu";
 import { useNavigate, NavLink } from "react-router-dom";
 import { socket } from "../socket";
 import { OptionalChainingExpression } from "./../../node_modules/@swc/types/index.d";
+import SearchBar from "../components/SearchBar";
 
 export const Home: React.FC = () => {
 	const [channels, setChannels] = useState<Array<unknown>>([]);
@@ -75,7 +76,7 @@ export const Home: React.FC = () => {
 				{/* <Input width="25vw" placeholder="filler"></Input>
 				 */}
 				<HStack gap="10" width="full">
-					<form onSubmit={onSubmit}>
+					{/* <form onSubmit={onSubmit}>
 						<InputGroup>
 							<InputLeftElement children={<LuSearch />} />
 							<Input
@@ -84,7 +85,8 @@ export const Home: React.FC = () => {
 								onChange={(event) => onChange(event)}
 							/>
 						</InputGroup>
-					</form>
+					</form> */}
+					<SearchBar></SearchBar>
 				</HStack>
 			</Flex>
 

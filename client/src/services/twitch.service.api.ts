@@ -20,7 +20,7 @@ export const getChannelId = async (channelName: string) => {
 				channelName: channelName,
 			},
 		});
-		console.log(res.data);
+		// console.log(res.data);
 		
 		return res.data
 	} catch (error) {
@@ -41,12 +41,15 @@ export const getEmotes = async (channelId: string) => {
 	}
 };
 
-export const readChat = async (channelName: string) => {
+export const readChat = async (channelName: string, socket: any) => {
 	try {
+		console.log(`reading ${channelName}`);
+		
 		const res = await http.get("/readChat", {
 			params: {
 				channelName: channelName,
 				// channelId: channelId
+				socket: socket
 			},
 		});
 		console.log(res.data);

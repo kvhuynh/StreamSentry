@@ -42,25 +42,51 @@ export const getChannelId = async (channelName: string) => {
 		checkAuthorizationToken(http);
 		const channelId = await http.get(`helix/users?login=${channelName}`);
 		console.log(channelId.data.data[0].id);
-		return channelId.data.data[0].id
+		return channelId.data.data[0].id;
 	} catch (error: any) {
 		console.log(error);
-		
 	}
-}
+};
 
 export const getEmotes = async (channelId: string) => {
 	const emotes = await http.get(`7tv.io/v3/users/twitch/${channelId}`);
 	console.log(emotes);
 };
 
-export const readChat = (channelName: string, channelId: string) => {
+let currentClient: any = null;
+export const readChat = async (channelName: string, socket: any) => {
+	
+	if (currentClient) {
+		try{
+
+			console.log(`disconnecting from old channel ${currentClient.channels[0].slice(1)}`);
+			currentClient.part(currentClient.channels[0].slice(1));
+			// await currentClient.disconnect();
+			// console.log(currentClient);
+			
+			// await currentClient.removeAllListeners(socket);
+		} catch (error) {
+			console.log(error);
+			
+		}
+		
+	}
+	
+	console.log(channelName);
+	
 	const client = new tmi.Client({
 		channels: [channelName],
 	});
-
-	client.connect();
-	client.on("message", (channel: any, tags: any, message: any, self: any) => {
+	console.log(client.channels);
+	
+	
+	currentClient = client;
+	currentClient.connect();
+	
+	currentClient.on("message", (channel: any, tags: any, message: any, self: any) => {
+		console.log(channel);
+		// console.log(currentClient.opts);
+		
 		fastApiSocket.emit("message", {
 			username: tags.username,
 			message: message,
