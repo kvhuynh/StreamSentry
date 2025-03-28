@@ -65,11 +65,11 @@ export const Channel: React.FC = () => {
 					{/* <SentimentChart socket={socket} channelName={channelName!} key={channelName!}/> */}
 				</Box>
 				<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
-					{/* <iframe
+					<iframe
 						src={`https://chatis.is2511.com/v2/?channel=${channelName}&animate=true&bots=true&size=1&font=3&shadow=3`}
 						// width="100%"
 						height="100%"
-					></iframe> */}
+					></iframe>
 				</Box>
 			</Flex>
 		</div>

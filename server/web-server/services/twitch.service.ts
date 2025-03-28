@@ -71,32 +71,44 @@ export const readChat = async (channelName: string, socket: any) => {
 				username: tags.username,
 				message: message,
 			});
-			parseEmotes(message);
-
+			parseEmotes(message)
 		}
 	);
 };
 
-export const emoteOperations = async (channelId: string) => {
-	const emotes = getEmotes(channelId);
-	parseEmotes(channelId, emotes);
-}
 
+let currentEmotes: Map<string, object>;
 export const getEmotes = async (channelId: string) => {
 	try {
 		const emotes = await axios.get(
 			`https://7tv.io/v3/users/twitch/${channelId}`
 		);
+		currentEmotes = new Map(emotes.data.emote_set.emotes.map((emote: any) => [emote.name, emote]));
 
+		
+		// console.log(currentEmotes);
+		
 		return emotes.data;
 	} catch (error: any) {
 		console.log(error);
 	}
 };
 
-const parseEmotes = (message: string, emotes: any) => {
-
-	// emit analysis
+const parseEmotes = (message: string) => {
+	// console.log(currentEmotes);
 	
-	// socket.emit("emote_analysis", emote_analysis)
+	const words = message.split(" ");
+	for (let word in words) {
+		
+		if (currentEmotes.has(words[word])) {
+			const currWord = words[word]
+			console.log(currentEmotes.get(words[word]))
+			
+		}
+	}
+	
+	
+// 	// emit analysis
+
+// 	// socket.emit("emote_analysis", emote_analysis)
 };
