@@ -95,14 +95,6 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 		},
 	};
 
-	// const isMounted = useRef(false);
-	// useEffect(() => {
-	// 	if (!isMounted.current) {
-	// 		readChat(channelName);
-	// 	}
-	// 	isMounted.current = true;
-	// }, [channelName]);
-
 	useEffect(() => {
 		console.log("use effect trigger");
 		const handleSentimentData = (newData) => {
@@ -138,7 +130,7 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 			// leaveChannel(channelName)
             
 		};
-	}, [channelName]); // Add socket as a dependency
+	}, [channelName]); 
 
 	return (
 		<div>

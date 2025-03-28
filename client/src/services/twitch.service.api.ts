@@ -20,7 +20,7 @@ export const getChannelId = async (channelName: string) => {
 				channelName: channelName,
 			},
 		});
-		// console.log(res.data);
+		console.log(` get channelId = ${res.data}`);
 		
 		return res.data
 	} catch (error) {
@@ -29,13 +29,16 @@ export const getChannelId = async (channelName: string) => {
 };
 
 export const getEmotes = async (channelId: string) => {
+	console.log(`${channelId} in getEmotes twitch service api`);
+	
 	try {
 		const res = await http.get("/getEmotes", {
 			params: {
 				channelId: channelId,
 			},
 		});
-		console.log(res.data.data);
+		// console.log(res.data.data);
+		return res.data
 	} catch (error) {
 		console.log(error);
 	}

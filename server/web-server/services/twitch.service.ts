@@ -41,44 +41,62 @@ export const getChannelId = async (channelName: string) => {
 	try {
 		checkAuthorizationToken(http);
 		const channelId = await http.get(`helix/users?login=${channelName}`);
-		console.log(channelId.data);
-		
-		console.log(channelId.data.data[0].id);
+
 		return channelId.data.data[0].id;
 	} catch (error: any) {
 		console.log(error);
 	}
 };
 
-export const getEmotes = async (channelId: string) => {
-	const emotes = await http.get(`7tv.io/v3/users/twitch/${channelId}`);
-	console.log(emotes);
-};
-
 let currentClient: any = null;
 export const readChat = async (channelName: string, socket: any) => {
-	
 	if (currentClient) {
-			console.log(`disconnecting from old channel ${currentClient.channels[0].slice(1)}`);
-			currentClient.part(currentClient.channels[0].slice(1));
-	
+		console.log(
+			`disconnecting from old channel ${currentClient.channels[0].slice(1)}`
+		);
+		currentClient.part(currentClient.channels[0].slice(1));
 	}
-	
-	console.log(channelName);
-	
+
 	const client = new tmi.Client({
 		channels: [channelName],
 	});
-	console.log(client.channels);
-	
-	
+
 	currentClient = client;
 	currentClient.connect();
+	console.log(`Connected to ${channelName}'s chat`);
+	currentClient.on(
+		"message",
+		(channel: any, tags: any, message: any, self: any) => {
+			fastApiSocket.emit("message", {
+				username: tags.username,
+				message: message,
+			});
+			parseEmotes(message);
+
+		}
+	);
+};
+
+export const emoteOperations = async (channelId: string) => {
+	const emotes = getEmotes(channelId);
+	parseEmotes(channelId, emotes);
+}
+
+export const getEmotes = async (channelId: string) => {
+	try {
+		const emotes = await axios.get(
+			`https://7tv.io/v3/users/twitch/${channelId}`
+		);
+
+		return emotes.data;
+	} catch (error: any) {
+		console.log(error);
+	}
+};
+
+const parseEmotes = (message: string, emotes: any) => {
+
+	// emit analysis
 	
-	currentClient.on("message", (channel: any, tags: any, message: any, self: any) => {		
-		fastApiSocket.emit("message", {
-			username: tags.username,
-			message: message,
-		});
-	});
+	// socket.emit("emote_analysis", emote_analysis)
 };

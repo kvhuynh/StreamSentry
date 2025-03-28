@@ -1,16 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { Line } from "react-chartjs-2";
-import {
-	Chart as ChartJS,
-	LineElement,
-	PointElement,
-	Tooltip,
-	Legend,
-	CategoryScale,
-	LinearScale,
-} from "chart.js";
+
 import { Socket } from "socket.io-client";
-import { readChat } from "../services/twitch.service.api";
+import { getEmotes } from "../services/twitch.service.api";
 import { useLocation, useParams } from "react-router-dom";
 
 type EmoteChartProps = {
@@ -26,16 +17,18 @@ export const EmoteChart: React.FC<EmoteChartProps> = ({
 	let { channelName } = useParams();
 
 	useEffect(() => {
-		if (!channelName) {
-			// take channelName
-		}
-		// const handleSentimentData = (newData) => {
-		// 	socket.on("sentiment_data", handleSentimentData);
-
-		// 	return () => {
-		// 		socket.off("sentiment_data", handleSentimentData);
-		// 	};
-		// };
+        // load emote set 
+        // console.log(channelId)
+        if (channelId != '') {
+            console.log(`channelId is ${channelId}`);
+            
+            getEmotes(channelId).then((emotes) => {
+                console.log(emotes);
+                
+            });
+        }
+        
+        // socket.on("emote_data", handleEmoteData)
 	}, []);
 };
 

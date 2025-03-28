@@ -16,8 +16,10 @@ fastApiSocket.on("disconnect", () => {
 });
 
 fastApiSocket.on("sentiment_result", (data: any) => {
-    // console.log("Received response from FastAPI:", data);
+    // sends data to front end
     emitEvent("sentiment_data", data);
 });
+
+
 
 export default fastApiSocket;

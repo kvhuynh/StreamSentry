@@ -26,7 +26,16 @@ export const handleGetChannelId = async (req: any, res: any) => {
 };
 
 export const handleGetEmotes = async (req: any, res: any) => {
-	getEmotes(req.query.channelId);
+	try{
+		console.log(req.query.channelId);
+		
+		const emotes = await getEmotes(req.query.channelId);
+		return res.json(emotes);
+
+	} catch (error: any) {
+		console.log(error);
+		
+	}
 };
 
 export const handleReadChat = async (req: any, res: any) => {
