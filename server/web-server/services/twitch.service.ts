@@ -41,6 +41,8 @@ export const getChannelId = async (channelName: string) => {
 	try {
 		checkAuthorizationToken(http);
 		const channelId = await http.get(`helix/users?login=${channelName}`);
+		console.log(channelId.data);
+		
 		console.log(channelId.data.data[0].id);
 		return channelId.data.data[0].id;
 	} catch (error: any) {
@@ -57,19 +59,9 @@ let currentClient: any = null;
 export const readChat = async (channelName: string, socket: any) => {
 	
 	if (currentClient) {
-		try{
-
 			console.log(`disconnecting from old channel ${currentClient.channels[0].slice(1)}`);
 			currentClient.part(currentClient.channels[0].slice(1));
-			// await currentClient.disconnect();
-			// console.log(currentClient);
-			
-			// await currentClient.removeAllListeners(socket);
-		} catch (error) {
-			console.log(error);
-			
-		}
-		
+	
 	}
 	
 	console.log(channelName);
@@ -83,10 +75,7 @@ export const readChat = async (channelName: string, socket: any) => {
 	currentClient = client;
 	currentClient.connect();
 	
-	currentClient.on("message", (channel: any, tags: any, message: any, self: any) => {
-		console.log(channel);
-		// console.log(currentClient.opts);
-		
+	currentClient.on("message", (channel: any, tags: any, message: any, self: any) => {		
 		fastApiSocket.emit("message", {
 			username: tags.username,
 			message: message,

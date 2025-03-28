@@ -90,7 +90,7 @@ export const Channel: React.FC = () => {
 	const [channelId, setChannelId] = useState("");
 
 	const isClientInitialized = useRef(false);
-	const previousChannel = useRef<any>(null);
+	const previousChannel = useRef<unknown | null >(null);
 
 	useEffect(() => {
 		// clicked from home page
@@ -102,9 +102,7 @@ export const Channel: React.FC = () => {
 				setChannelId(res);
 			});
 		}
-		console.log(channelName);
 
-		// readChat(channelName!, socket);
 		// Check if the channel has changed
 		if (previousChannel.current !== channelName) {
 			if (isClientInitialized.current) {
@@ -113,20 +111,11 @@ export const Channel: React.FC = () => {
 				console.log(`Leaving channel: ${previousChannel.current}`);
 			}
 
-			// Join the new channel
 			readChat(channelName!, socket);
-			console.log(`Joining channel: ${channelName}`);
-
-			// Mark the client as initialized and update the channel ref
 			isClientInitialized.current = true;
 			previousChannel.current = channelName;
 		}
 
-		// if (!isMounted.current) {
-		// 	readChat(channelName!, socket);
-		// 	// getEmotes(channelName!);
-		// }
-		// isMounted.current = true;
 	}, [channelName]);
 
 	return (
@@ -137,10 +126,11 @@ export const Channel: React.FC = () => {
 				</Box>
 				<Box w="70%">
 					showing channel {channelName}
-					<SentimentChart socket={socket} channelName={channelName!} />
+					{/* <SentimentChart socket={socket} channelName={channelName!} key={channelName!}/> */}
 				</Box>
 				<Box w="70%">
 					{/* <EmoteChart socket={socket} channelName={channelId!} /> */}
+					<SentimentChart socket={socket} channelName={channelName!} key={channelName!}/>
 				</Box>
 				<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
 					<iframe

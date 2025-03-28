@@ -24,13 +24,13 @@ ChartJS.register(
 type DataSet = {
 	label: string;
 	data: Array<object>[];
+	pointRadius: number;
 	borderColor: string;
 	backgroundColor: string;
 };
 
 type SentimentChartProps = {
 	socket: Socket; // Accept socket instance from Channel.tsx
-	leaveChannel: any;
 	channelName: string;
 };
 
@@ -46,28 +46,33 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 		datasets: Array<DataSet>;
 	}>({
 		labels: [],
+		
 		datasets: [
 			{
 				label: "Negative",
 				data: [],
+				pointRadius: 0,  
 				borderColor: "rgb(255, 99, 132)", // Red
 				backgroundColor: "rgba(255, 99, 132, 0.2)",
 			},
 			{
 				label: "Neutral",
 				data: [],
+				pointRadius: 0,  
 				borderColor: "rgb(128, 128, 128)", // Gray
 				backgroundColor: "rgba(128, 128, 128, 0.2)",
 			},
 			{
 				label: "Positive",
 				data: [],
+				pointRadius: 0,  
 				borderColor: "rgb(75, 192, 192)", // Green
 				backgroundColor: "rgba(75, 192, 192, 0.2)",
 			},
 			{
 				label: "Compound",
 				data: [],
+				pointRadius: 0,  
 				borderColor: "rgb(54, 162, 235)", // Blue
 				backgroundColor: "rgba(54, 162, 235, 0.2)",
 			},
@@ -101,7 +106,6 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 	useEffect(() => {
 		console.log("use effect trigger");
 		const handleSentimentData = (newData) => {
-			// console.log("Received sentiment data:", newData);
 
 			setChartData((prev) => {
 				const newLabels = [
@@ -134,7 +138,7 @@ export const SentimentChart: React.FC<SentimentChartProps> = ({
 			// leaveChannel(channelName)
             
 		};
-	}, []); // Add socket as a dependency
+	}, [channelName]); // Add socket as a dependency
 
 	return (
 		<div>
