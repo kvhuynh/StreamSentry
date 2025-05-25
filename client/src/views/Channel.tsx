@@ -8,46 +8,74 @@ import {
 	getEmotes,
 	getChannelId,
 } from "../services/twitch.service.api";
+import { useChatListener } from "../hooks/useChatListener";
 import SentimentChart from "../components/LineChart";
 import EmoteChart from "../components/EmoteChart"
 import SearchBar from "../components/SearchBar";
 
 export const Channel: React.FC = () => {
-	const { state } = useLocation();
-	let { channelName } = useParams();
-	const [channelId, setChannelId] = useState("");
+	// const { state } = useLocation();
+	// let { channelName } = useParams();
+	// const [channelId, setChannelId] = useState("");
 
-	const isClientInitialized = useRef(false);
-	const previousChannel = useRef<unknown | null >(null);
+	// const isClientInitialized = useRef(false);
+	// const previousChannel = useRef<unknown | null >(null);
+	// 
+	// useEffect(() => {
+	// 	// clicked from home page
+	// 	if (state) {
+	// 		channelName = state.channel.user_name;
+	// 		console.log(state.channel);
+			
+	// 		console.log(state.channel.id)
+	// 		setChannelId(state.channel.user_id);
+	// 	} else {
+	// 		getChannelId(channelName!).then((res: string) => {
+	// 			setChannelId(res);
+	// 		});
+	// 	}
+
+
+	// 	const handleEmoteMetaData = (data: any) => {
+	// 		console.log(data);
+	// 	};
+	// 	socket.off("emoteMetaData");
+	// 	socket.on("emoteMetaData", handleEmoteMetaData)
+	// 	// socket.on("emoteMetaData", (data) => console.log(data))
+	// 	// Check if the channel has changed
+	// 	if (previousChannel.current !== channelName) {
+	// 		if (isClientInitialized.current) {
+	// 			// Leave the previous channel before joining the new one
+	// 			socket.emit("leave_channel", previousChannel.current);
+	// 			console.log(`Leaving channel: ${previousChannel.current}`);
+	// 		}
+
+	// 		readChat(channelName!, socket);
+
+	// 		isClientInitialized.current = true;
+	// 		previousChannel.current = channelName;
+	// 	}
+
+	// }, [channelName, channelId]);
+
+	const { state } = useLocation();
+	const { channelName: paramChannel } = useParams();
+	const [channelName, setChannelName] = useState("");
+
+	const { channelId, setChannelId } = useChatListener(channelName);
 
 	useEffect(() => {
-		// clicked from home page
-		if (state) {
-			channelName = state.channel.user_name;
-			console.log(state.channel);
-			
-			console.log(state.channel.id)
+		if (state?.channel?.user_name) {
+			setChannelName(state.channel.user_name);
 			setChannelId(state.channel.user_id);
-		} else {
-			getChannelId(channelName!).then((res: string) => {
-				setChannelId(res);
+		} else if (paramChannel) {
+			setChannelName(paramChannel);
+			getChannelId(paramChannel).then((id) => {
+				setChannelId(id);
 			});
 		}
+	}, [state, paramChannel]);
 
-		// Check if the channel has changed
-		if (previousChannel.current !== channelName) {
-			if (isClientInitialized.current) {
-				// Leave the previous channel before joining the new one
-				socket.emit("leave_channel", previousChannel.current);
-				console.log(`Leaving channel: ${previousChannel.current}`);
-			}
-
-			readChat(channelName!, socket);
-			isClientInitialized.current = true;
-			previousChannel.current = channelName;
-		}
-
-	}, [channelName, channelId]);
 
 	return (
 		<div>
@@ -65,11 +93,11 @@ export const Channel: React.FC = () => {
 					{/* <SentimentChart socket={socket} channelName={channelName!} key={channelName!}/> */}
 				</Box>
 				<Box flex="1" position={"fixed"} ml="70%" h={"100vh"} w={"30%"}>
-					<iframe
+					{/* <iframe
 						src={`https://chatis.is2511.com/v2/?channel=${channelName}&animate=true&bots=true&size=1&font=3&shadow=3`}
 						// width="100%"
 						height="100%"
-					></iframe>
+					></iframe> */}
 				</Box>
 			</Flex>
 		</div>
