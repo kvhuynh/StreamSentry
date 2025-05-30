@@ -11,12 +11,14 @@ export const useChatListener = (channelName: string) => {
 	const previousChannel = useRef<string | null>(null);
 	const isClientInitialized = useRef(false);
 	const [channelId, setChannelId] = useState<string>("");
+	const [popularEmotes, setPopularEmotes] = useState([]);
 
 	useEffect(() => {
 		if (!channelName) return;
 
 		const handleEmoteMetaData = (data: any) => {
 			console.log("Received emoteMetaData:", data);
+			setPopularEmotes(data);
 		};
 
 		// Clean up stale listeners before adding new one
@@ -43,5 +45,5 @@ export const useChatListener = (channelName: string) => {
 		};
 	}, [channelName]);
 
-	return { channelId, setChannelId };
+	return { channelId, setChannelId, popularEmotes };
 };

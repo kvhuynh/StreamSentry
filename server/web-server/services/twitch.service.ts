@@ -177,6 +177,7 @@ let currentEmotes: Map<string, object> = new Map();
 
 // 🔵 EMOTE COUNTS FOR INTERVAL AGGREGATION
 let emoteCounts = new Map<string, number>();
+// let emoteCounts = new Map<Map<string, object>, number>;
 
 // Emit top emote every 10 seconds
 setInterval(() => {
@@ -187,11 +188,10 @@ setInterval(() => {
   
 	// Emit all emote counts
 	emitEvent("popularEmotes", sorted.map(([emote, count]) => ({ emote, count })));
-  
+	
 	// Clear for next window
 	emoteCounts.clear();
 
-	emoteCounts.clear(); // Reset for next window
 }, 10000);
 
 // 🔵 GET CHANNEL EMOTES FROM 7TV
@@ -203,20 +203,14 @@ export const getEmotes = async (channelId: string) => {
 		currentEmotes = new Map(
 			emotes.data.emote_set.emotes.map((emote: any) => [emote.name, emote])
 		);
+		console.log(currentEmotes);
+		
 		return emotes.data;
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-// 🔵 PARSE EMOTES IN MESSAGE
-const parseEmotes = (message: string): string | null => {
-	const words = message.split(" ");
-	for (const word of words) {
-		if (currentEmotes.has(word)) return word;
-	}
-	return null;
-};
 
 // 🔵 MAIN CHAT HANDLER
 let currentClient: any = null;
@@ -248,14 +242,38 @@ export const readChat = async (channelName: string, socket: any) => {
 		});
 
 		// Handle emotes
-		const emoteName = parseEmotes(message);
-		if (emoteName) {
+		const emote = parseEmotes(message);
+		if (emote) {
 			// Increase emote count
-			emoteCounts.set(emoteName, (emoteCounts.get(emoteName) || 0) + 1);
+
+			// set the key to be the value 
+			emoteCounts.set(emote, (emoteCounts.get(emote) || 0) + 1);
 
 			// Optional: Emit full metadata (you already had this)
-			const emoteMeta = currentEmotes.get(emoteName);
+			const emoteMeta = currentEmotes.get(emote);
 			if (emoteMeta) emitEvent("emoteMetaData", emoteMeta);
 		}
 	});
+};
+
+// 🔵 PARSE EMOTES IN MESSAGE
+const parseEmotes = (message: string): any => {
+	const words = message.split(" ");
+	for (const word of words) {
+		if (currentEmotes.has(word)) {
+			return currentEmotes.get(word);
+		} 
+	}
+	return null;
+};
+
+export const getPopularChannels = async () => {
+	try {
+		await checkAuthorizationToken(http);
+
+		const res = await http.get(`helix/streams?"first=200`);
+		return res.data;
+	} catch (error: any) {
+		console.log(error);
+	}
 };

@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import "chart.js/auto";
 import { socket } from "../socket";
 import { useLocation, useParams } from "react-router-dom";
@@ -62,7 +62,7 @@ export const Channel: React.FC = () => {
 	const { channelName: paramChannel } = useParams();
 	const [channelName, setChannelName] = useState("");
 
-	const { channelId, setChannelId } = useChatListener(channelName);
+	const { channelId, setChannelId, popularEmotes } = useChatListener(channelName);
 
 	useEffect(() => {
 		if (state?.channel?.user_name) {
@@ -98,6 +98,16 @@ export const Channel: React.FC = () => {
 						// width="100%"
 						height="100%"
 					></iframe> */}
+					{popularEmotes.map((element) =>{
+						return (
+						<>
+						<Flex >
+							<Image src={`${element.emote.data.host.url}/${element.emote.data.host.files[6].name}`} ></Image>
+							<div>{element.count}</div>
+						</Flex>
+						</>
+					)
+					})}
 				</Box>
 			</Flex>
 		</div>

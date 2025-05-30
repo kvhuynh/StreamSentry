@@ -17,7 +17,7 @@ export const initializeSocket = (io: Server) => {
 
 export const emitEvent = (eventName: string, data: any) => {
 	if (ioInstance) {
-		console.log(data);
+		// console.log(data);
 		
 		ioInstance.emit(eventName, data);
 	} else {
